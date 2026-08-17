@@ -1,42 +1,46 @@
 from collections import deque
 
 graph = {
-    'A': ['C', 'D', 'F'],
-    'C': ['B', 'E'],
-    'D': ['G'],
-    'F': [],
-    'B': [],
-    'E': [],
-    'G': ['H', 'T'],
-    'H': ['K', 'M'],
-    'K': [],
+    'A': ['B', 'C', 'D'],
+    'B': ['E', 'F'],
+    'C': ['G', 'H'],
+    'D': ['I', 'J'],
+    'E': ['K', 'L'],
+    'F': ['L', 'M'],
+    'G': ['N'],
+    'H': ['O', 'P'],
+    'I': ['P', 'Q'],
+    'J': ['N'],
+    'K': ['S'],
+    'L': ['T'],
     'M': [],
-    'T': []
+    'N': [],
+    'O': [],
+    'P': ['U'],
+    'Q': [],
+    'S': [],
+    'T': [],
+    'U': []
 }
 
-queue = deque(['A'])
-visited = {'A'}
-parent = {'A': None}
+def bfs_search(graph, start, goal):
+    visited = []
+    queue = deque([start])
+    
+    while queue:
+        node = queue.popleft()
+        if node not in visited:
+            visited.append(node)
+            
+            if node == goal:
+                break
 
-while queue:
-    u = queue.popleft()
+            for neighbor in graph.get(node, []):
+                if neighbor not in visited and neighbor not in queue:
+                    queue.append(neighbor)
+                    
+    return visited
 
-    if u == 'T':
-        break
-
-    for v in graph[u]:
-        if v not in visited:
-            visited.add(v)
-            parent[v] = u
-            queue.append(v)
-
-path = []
-u = 'T'
-
-while u is not None:
-    path.append(u)
-    u = parent[u]
-
-path.reverse()
-
-print("Đường đi:", " -> ".join(path))
+result = bfs_search(graph, 'A', 'P')
+print("Thứ tự các nút duyệt qua (BFS):")
+print(" -> ".join(result))
